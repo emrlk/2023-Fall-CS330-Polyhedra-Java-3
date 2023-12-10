@@ -22,6 +22,7 @@ public class Cylinder
     public Cylinder()
     {
         // Something is missing here...
+        this(1,1);
     }
 
     /**
@@ -39,14 +40,17 @@ public class Cylinder
     @Override
     public String getType()
     {
-        return null;
+        return "Cylinder";
     }
 
     @Override
     public BoundingBox getBoundingBox()
     {
         // null is not a bounding box...
-        return null;
+        final double d = this.getRadius() * 2.00;
+        final double h = this.getHeight();
+
+        return new BoundingBox(d, d, h);
     }
 
     /**
@@ -103,27 +107,38 @@ public class Cylinder
     public Polyhedron clone()
     {
         // null is not a Cylinder...
-        return null;
+        return new Cylinder(this.radius, this.height);
     }
 
     @Override
     public void scale(double scalingFactor)
     {
         // Where is the scaling logic?
+        this.radius *= scalingFactor;
+        this.height *= scalingFactor;
     }
 
     @Override
     public boolean equals(Object rhs)
     {
         // This is a placeholder...
-        return false;
+        if (!(rhs instanceof Cylinder)) {
+            return false;
+        }
+
+        Cylinder rhsCylinder = (Cylinder) rhs;
+
+        return (Point.equalWithinDftThreshold(this.radius, rhsCylinder.radius) &&
+            Point.equalWithinDftThreshold(this.height, rhsCylinder.height) );
     }
 
     @Override
     public int hashCode()
     {
         // This is a placeholder...
-        return -1;
+        return this.getType().hashCode()
+              + Double.valueOf(this.radius).hashCode()
+              + Double.valueOf(this.height).hashCode();
     }
 
     @Override
@@ -139,12 +154,14 @@ public class Cylinder
     public int numberOfDimensions()
     {
         // Zero... I think the Cylinder has more than zero dimensions.
-        return 0;
+        return 1;
     }
 
     @Override
     public void fromDimensions(double[] theDims)
     {
         // Something is missing...
+        this.height = theDims[0];
+        this.radius = theDims[1];
     }
 }
