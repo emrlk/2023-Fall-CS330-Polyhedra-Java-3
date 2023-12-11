@@ -1,8 +1,8 @@
 package polyhedra;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.Iterator;
 
 /**
  * A Composite Polyhedron. Polyhedra of this type are built from
@@ -35,11 +35,24 @@ public class Composite
         this.theBox = new BoundingBox();
     }
 
+    /**
+     * Composite Copy Constructor.
+     *
+     * @param src source Composite object to copy
+     */
+    public Composite(Composite src)
+    {
+        allPolyhedra = new Vector<Polyhedron>();
+        for(Polyhedron p : src.allPolyhedra){
+            allPolyhedra.add(p.clone());
+        }
+        //theBox.merge(src.getBoundingBox()); 
+    }
+
     @Override
     public String getType()
     {
-        // Replace the return line
-        return null;
+        return "Composite";
     }
 
     @Override
@@ -55,7 +68,8 @@ public class Composite
      */
     public void add(Polyhedron toAdd)
     {
-        // Write this function.
+        allPolyhedra.add(toAdd.clone());
+        theBox.merge(toAdd.getBoundingBox());
     }
 
     /**
@@ -67,6 +81,10 @@ public class Composite
     public void scale(double scalingFactor)
     {
         // Write this function.
+        for(Polyhedron p : allPolyhedra){
+            p.scale(scalingFactor);
+        }
+        theBox.scale(scalingFactor);
     }
 
     /**
@@ -89,9 +107,12 @@ public class Composite
     public Polyhedron clone()
     {
         Composite aCopy = new Composite();
-
-        // A loop might be helpful to 'add' each entry from this.allPolyhedra
-
+        
+        // A loop might be helpful to 'add' each entry
+        // from this.allPolyhedra
+        for(Polyhedron p : this.allPolyhedra){
+            aCopy.add(p);
+        }
         return aCopy;
     }
 
@@ -127,8 +148,9 @@ public class Composite
 
         bld.append(Polyhedron.super.toStringHelper());
         bld.append(String.format("%d polyhedra%n", this.size()));
-
-        // Maybe a loop can help...
+        for (Polyhedron poly : this.allPolyhedra) {
+            bld.append("  " + poly.toString() + "\n");
+        }
 
         return bld.toString();
     }
@@ -138,7 +160,7 @@ public class Composite
     public boolean isComplex()
     {
         // Is the return corrrect?
-        return false;
+        return true;
     }
 
     @Override
