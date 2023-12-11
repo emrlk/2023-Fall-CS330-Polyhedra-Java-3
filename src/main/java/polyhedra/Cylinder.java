@@ -154,7 +154,7 @@ public class Cylinder
     public int numberOfDimensions()
     {
         // Zero... I think the Cylinder has more than zero dimensions.
-        return 1;
+        return 2;
     }
 
     @Override
